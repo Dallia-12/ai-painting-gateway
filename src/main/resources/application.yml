@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ai-painting-gateway
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3307/painting_gateway?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6380
+      timeout: 3s
+      lettuce:
+        pool:
+          max-active: 16
+          max-idle: 8
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+storage:
+  local:
+    base-dir: ./data/images
+    public-prefix: /images
+
+app:
+  provider:
+    # 切换供应商只改这一行，代码无需改动
+    active: mock
+    mock:
+      min-latency-seconds: 5
+      max-latency-seconds: 15
+      # 调成 0.3 可以观察部分成功与重试逻辑
+      fail-rate: 0.0
+  recovery:
+    # 超过这么久没被轮询过就视为僵死
+    stale-seconds: 120
+    max-retry: 3
+    batch-size: 50
+    interval-ms: 60000
+
+logging:
+  level:
+    com.yzc.painting: info
